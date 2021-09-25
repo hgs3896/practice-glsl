@@ -23,6 +23,7 @@ func main() {
 		port = p
 	}
 
+	fmt.Printf("Server is running on \"http://localhost:%v\"\n", port)
 	http.Handle("/", new(staticHandler))
 	http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
 }
@@ -67,9 +68,9 @@ func (h *staticHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		contentType = getContentType(".json")
 	} else {
 		if req.URL.Path == "/" {
-			path = "web/static/index.html" // default page
+			path = "static/index.html" // default page
 		} else {
-			path = "web/static" + req.URL.Path // from static dir
+			path = "static" + req.URL.Path // from static dir
 		}
 		content, err = ioutil.ReadFile(path)
 		if err != nil {
