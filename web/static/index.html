@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <title>GLSL Galary made by hgs</title>
+    <script type="text/javascript" src="GlslCanvas.js"></script>
+</head>
+
+<body>
+    <h1>GLSL Galary made by hgs</h1>
+    <section id="glsl-galary">
+        <!-- Multiple views of canvas will be disposed here. -->
+    </section>
+
+    <script>
+        (function () {
+            const galary = window.document.getElementById("glsl-galary");
+
+            if (!String.format) {
+                String.prototype.format = function () {
+                    var formatted = this;
+                    for (var arg in arguments) {
+                        formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+                    }
+                    return formatted;
+                };
+            }
+
+            function getParams() {
+                const obj = {};
+                window.location.search.substr(1).split("&").forEach(item => {
+                    const tmp = item.split("=");
+                    const key = tmp[0];
+                    const value = decodeURIComponent(tmp[1]);
+                    obj[key] = value;
+                })
+                return obj;
+            }
+
+            function requestFragmentShaders(callback) {
+                const request = new XMLHttpRequest();
+                if (!request) {
+                    return;
+                }
+                request.onreadystatechange = () => {
+                    if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
+                        const result = JSON.parse(request.responseText);
+                        callback(result.files);
+                    }
+                };
+                request.open("GET", "/list/fragment-shaders");
+                request.send();
+            }
+
+            function showShaders(filenames) {
+                children = filenames.map(
+                    (filename, idx) => {
+                        const header = document.createElement("h2");
+                        
+                        header.textContent = "# " + (idx + 1);
+
+                        const canvas = document.createElement("canvas");
+                        
+                        canvas.className = "glslCanvas";
+                        canvas.width = 500;
+                        canvas.height = 500;
+                        canvas.value = `Your browser doesn't appear to support the HTML5 <canvas> element.`;
+                        canvas.setAttribute("data-fragment-url", filename);
+
+                        const description = document.createElement("figcaption");
+                        
+                        description.textContent = filename;
+
+                        const parent = document.createElement("figure");
+                        
+                        parent.onclick = (h, ev) => window.open("https://github.com/hgs3896/practice-glsl/blob/main/src/" + filename);
+                        parent.appendChild(header);
+                        parent.appendChild(canvas);
+                        parent.append(description);
+                        return parent;
+                    });
+
+                galary.replaceChildren(...children);
+            }
+
+            requestFragmentShaders(showShaders);
+        })();
+    </script>
+</body>
+
+</html>
