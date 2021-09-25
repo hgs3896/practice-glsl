@@ -1,2 +1,1 @@
-release: go build web/server.go
 web: ./server
