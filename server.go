@@ -13,13 +13,14 @@ import (
 
 func main() {
 	var port int = 5000
-	port_str, exist := os.LookupEnv("PORT")
-	if exist {
-		p, err := strconv.Atoi(port_str)
+
+	if len(os.Args) >= 2 {
+		p, err := strconv.Atoi(os.Args[1])
 		if err != nil || (p < 0 || p > 2<<16-1) {
 			fmt.Printf("Use a correct port number %v\n", p)
 			return
 		}
+		port = p
 	}
 
 	http.Handle("/", new(staticHandler))
