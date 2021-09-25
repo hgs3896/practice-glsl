@@ -5,3 +5,5 @@ GLSL(OpenGL Shader Language)을 이용하여 쉐이더 프로그래밍을 연습
 ```
 go run main
 ```
+또는
+https://glsl-galary.herokuapp.com/
