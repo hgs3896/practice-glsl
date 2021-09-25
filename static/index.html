@@ -2,7 +2,6 @@
 
 <head>
     <title>GLSL Galary made by hgs</title>
-    <script type="text/javascript" src="GlslCanvas.js"></script>
 </head>
 
 <body>
@@ -51,27 +50,49 @@
                 request.send();
             }
 
+            function requestSource(source, callback) {
+                const request = new XMLHttpRequest();
+                if (!request) {
+                    return;
+                }
+                request.onreadystatechange = () => {
+                    if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
+                        callback(request.responseText);
+                    }
+                };
+                request.open("GET", "https://raw.githubusercontent.com/hgs3896/practice-glsl/main/src/" + source);
+                request.send();
+            }
+
             function showShaders(filenames) {
                 children = filenames.map(
                     (filename, idx) => {
+                        const parent = document.createElement("figure");
+
+                        const script = document.createElement("script");
+                        script.src = "GlslCanvas.js";
+                        script.type = "text/javascript";
+
                         const header = document.createElement("h2");
-                        
+
                         header.textContent = "# " + (idx + 1);
 
                         const canvas = document.createElement("canvas");
-                        
+
                         canvas.className = "glslCanvas";
                         canvas.width = 500;
                         canvas.height = 500;
                         canvas.value = `Your browser doesn't appear to support the HTML5 <canvas> element.`;
-                        canvas.setAttribute("data-fragment-url", "https://raw.githubusercontent.com/hgs3896/practice-glsl/main/src/"+filename);
+                        requestSource(filename, (data) => {
+                            canvas.setAttribute("data-fragment", data);
+                            parent.appendChild(script);
+                        });
 
                         const description = document.createElement("figcaption");
-                        
+
                         description.textContent = filename;
 
-                        const parent = document.createElement("figure");
-                        
+
                         parent.onclick = (h, ev) => window.open("https://github.com/hgs3896/practice-glsl/blob/main/src/" + filename);
                         parent.appendChild(header);
                         parent.appendChild(canvas);
