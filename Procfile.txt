@@ -1,1 +1,2 @@
-web: go run web/server.go
+release: go build web/server.go
+web: ./server
