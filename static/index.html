@@ -93,7 +93,6 @@
                         canvas.value = `Your browser doesn't appear to support the HTML5 <canvas> element.`;
                         requestSource(filename, (data) => {
                             canvas.setAttribute("data-fragment", data);
-                            window.dispatchEvent(customEvent);
                         });
 
                         const description = document.createElement("figcaption");
@@ -111,6 +110,7 @@
             }
 
             requestFragmentShaders(showShaders);
+            setTimeout(() => window.dispatchEvent(customEvent), 2500);
         })();
     </script>
     <script src="GlslCanvas.js"></script>
