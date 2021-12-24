@@ -8,6 +8,7 @@
 
 <body>
     <h1>GLSL Galary made by hgs</h1>
+    <h6>If the content isn't fully loaded, just click the unloaded content.</h6>
     <section id="glsl-galary">
         <!-- Multiple views of canvas will be disposed here. -->
     </section>
@@ -23,7 +24,7 @@
             }
             window.CustomEvent = CustomEvent;
         })();
-        const customEvent = new CustomEvent('canvas_load', { detail: {} });
+        const customEvent = new CustomEvent('canvas_load', { detail: { canvas: null } });
         (function () {
             const galary = window.document.getElementById("glsl-galary");
 
@@ -93,13 +94,14 @@
                         canvas.value = `Your browser doesn't appear to support the HTML5 <canvas> element.`;
                         requestSource(filename, (data) => {
                             canvas.setAttribute("data-fragment", data);
+                            window.dispatchEvent(new CustomEvent('canvas_load', { detail: { canvas: canvas } }));
                         });
 
                         const description = document.createElement("figcaption");
 
                         description.textContent = filename;
 
-                        // parent.onclick = (h, ev) => window.open("https://github.com/hgs3896/practice-glsl/blob/main/src/" + filename);
+                        parent.onclick = (h, ev) => window.dispatchEvent(new CustomEvent('canvas_load', { detail: { canvas: canvas } })); //window.open("https://github.com/hgs3896/practice-glsl/blob/main/src/" + filename);
                         parent.appendChild(header);
                         parent.appendChild(canvas);
                         parent.append(description);
@@ -110,7 +112,6 @@
             }
 
             requestFragmentShaders(showShaders);
-            setTimeout(() => window.dispatchEvent(customEvent), 2500);
         })();
     </script>
     <script src="GlslCanvas.js"></script>

@@ -2077,8 +2077,21 @@
         }
     }
 
-    window.addEventListener('canvas_load', function () {
-        loadAllGlslCanvas();
+    function loadGlslCanvas(canvas) {
+        if (!window.glslCanvases) {
+            window.glslCanvases = [];
+        }
+
+        var sandbox = new GlslCanvas(canvas);
+        if (sandbox.isValid) {
+            window.glslCanvases.push(sandbox);
+        }
+    }
+
+    window.addEventListener('canvas_load', function (e) {
+        if(e.detail.canvas){
+            loadGlslCanvas(e.detail.canvas);
+        }
     });
 
     return GlslCanvas;
