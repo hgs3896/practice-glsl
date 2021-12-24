@@ -1,4 +1,5 @@
-(function (global, factory) {
+(
+    function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define(factory) :
             (global.GlslCanvas = factory());
@@ -6,10 +7,6 @@
     'use strict';
 
     var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-
-
-
 
     function createCommonjsModule(fn, module) {
         return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -2068,6 +2065,7 @@
 
     function loadAllGlslCanvas() {
         var list = document.getElementsByClassName('glslCanvas');
+        
         if (list.length > 0) {
             window.glslCanvases = [];
             for (var i = 0; i < list.length; i++) {
@@ -2079,10 +2077,9 @@
         }
     }
 
-    window.addEventListener('load', function () {
+    window.addEventListener('canvas_load', function () {
         loadAllGlslCanvas();
     });
 
     return GlslCanvas;
-
 })));

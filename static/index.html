@@ -1,6 +1,8 @@
+<!DOCTYPE html>
 <html>
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLSL Galary made by hgs</title>
 </head>
 
@@ -11,6 +13,17 @@
     </section>
 
     <script>
+        (function () {
+            if ( typeof window.CustomEvent === "function" ) return false;
+            function CustomEvent ( event, params ) {
+                params = params || { bubbles: false, cancelable: false, detail: null };
+                var evt = document.createEvent( 'CustomEvent' );
+                evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+                return evt;
+            }
+            window.CustomEvent = CustomEvent;
+        })();
+        const customEvent = new CustomEvent('canvas_load', { detail: {} });
         (function () {
             const galary = window.document.getElementById("glsl-galary");
 
@@ -68,11 +81,6 @@
                 children = filenames.map(
                     (filename, idx) => {
                         const parent = document.createElement("figure");
-
-                        const script = document.createElement("script");
-                        script.src = "GlslCanvas.js";
-                        script.type = "text/javascript";
-
                         const header = document.createElement("h2");
 
                         header.textContent = "# " + (idx + 1);
@@ -85,15 +93,14 @@
                         canvas.value = `Your browser doesn't appear to support the HTML5 <canvas> element.`;
                         requestSource(filename, (data) => {
                             canvas.setAttribute("data-fragment", data);
-                            parent.appendChild(script);
+                            window.dispatchEvent(customEvent);
                         });
 
                         const description = document.createElement("figcaption");
 
                         description.textContent = filename;
 
-
-                        parent.onclick = (h, ev) => window.open("https://github.com/hgs3896/practice-glsl/blob/main/src/" + filename);
+                        // parent.onclick = (h, ev) => window.open("https://github.com/hgs3896/practice-glsl/blob/main/src/" + filename);
                         parent.appendChild(header);
                         parent.appendChild(canvas);
                         parent.append(description);
@@ -106,6 +113,7 @@
             requestFragmentShaders(showShaders);
         })();
     </script>
+    <script src="GlslCanvas.js"></script>
 </body>
 
 </html>
